@@ -1,3 +1,4 @@
+// Balance System Added
 using UnityEngine;
 
 public class BalanceManager : MonoBehaviour
