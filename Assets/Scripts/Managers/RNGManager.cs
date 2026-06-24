@@ -1,3 +1,4 @@
+// RNG Logic Added
 using UnityEngine;
 
 public class RNGManager : MonoBehaviour
