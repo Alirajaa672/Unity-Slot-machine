@@ -1,3 +1,4 @@
+// Statistics Manager Added
 using UnityEngine;
 
 public class StatisticsManager : MonoBehaviour
