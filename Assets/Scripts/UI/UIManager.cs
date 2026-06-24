@@ -1,3 +1,4 @@
+// Paytable Panel Added
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
