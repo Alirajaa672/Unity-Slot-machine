@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+
 public class Reel : MonoBehaviour
 {
     public ReelSymbol symbol;
@@ -9,59 +10,50 @@ public class Reel : MonoBehaviour
     [HideInInspector]
     public SymbolData currentSymbol;
 
-    public float spinDuration = 2f;
+    [Header("Spin Settings")]
+    public float baseSpinDuration = 1.5f;
 
     public IEnumerator Spin(
         SymbolData[] allSymbols,
-        SymbolData finalSymbol)
+        SymbolData finalSymbol,
+        float extraTime)
     {
+        float spinTime = baseSpinDuration + extraTime;
         float timer = 0f;
 
-        while (timer < spinDuration)
+        while (timer < spinTime)
         {
-            int randomIndex =
-                Random.Range(
-                    0,
-                    allSymbols.Length
-                );
+            int randomIndex = Random.Range(0, allSymbols.Length);
 
-            symbol.SetSprite(
-                allSymbols[randomIndex].sprite
-            );
+            symbol.SetSprite(allSymbols[randomIndex].sprite);
 
-            yield return
-                new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.05f);
 
             timer += 0.05f;
         }
 
         currentSymbol = finalSymbol;
 
-symbol.SetSprite(finalSymbol.sprite);
+        symbol.SetSprite(finalSymbol.sprite);
 
-symbol.transform.localScale = Vector3.one;
+        symbol.transform.localScale = Vector3.one;
 
-symbol.transform
-    .DOScale(1.2f, 0.15f)
-    .SetLoops(2, LoopType.Yoyo);
-        
+        symbol.transform
+            .DOScale(1.2f, 0.15f)
+            .SetLoops(2, LoopType.Yoyo);
     }
 
     public IEnumerator FlashWin()
     {
         for (int i = 0; i < 4; i++)
         {
-            symbol.image.color =
-                Color.yellow;
+            symbol.image.color = Color.yellow;
 
-            yield return
-                new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.15f);
 
-            symbol.image.color =
-                Color.white;
+            symbol.image.color = Color.white;
 
-            yield return
-                new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.15f);
         }
     }
 }
