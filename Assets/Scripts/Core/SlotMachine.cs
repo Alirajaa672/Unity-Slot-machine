@@ -7,15 +7,11 @@ using DG.Tweening;
 public class SlotMachine : MonoBehaviour
 {
     public Reel[] reels;
-
     public SymbolData[] symbols;
 
     public BalanceManager balanceManager;
-
     public UIManager uiManager;
-
     public AudioManager audioManager;
-
     public StatisticsManager statisticsManager;
 
     public Button spinButton;
@@ -27,23 +23,21 @@ public class SlotMachine : MonoBehaviour
         if (isSpinning)
             return;
 
-        reels[0].symbol.glow.SetActive(false);
-        reels[1].symbol.glow.SetActive(false);
-        reels[2].symbol.glow.SetActive(false);
+        foreach (Reel reel in reels)
+        {
+            reel.symbol.glow.SetActive(false);
+        }
 
         if (balanceManager.balance <= 0)
         {
             uiManager.ShowGameOver();
-
             spinButton.interactable = false;
-
             return;
         }
 
         uiManager.ClearResult();
 
-        if (balanceManager.balance <
-            balanceManager.currentBet)
+        if (balanceManager.balance < balanceManager.currentBet)
         {
             uiManager.ShowLose();
             return;
@@ -53,159 +47,91 @@ public class SlotMachine : MonoBehaviour
             .DOScale(0.9f, 0.1f)
             .SetLoops(2, LoopType.Yoyo);
 
-        if (audioManager != null)
-            audioManager.PlayButton();
+        audioManager?.PlayButton();
 
         statisticsManager.RegisterSpin();
         uiManager.UpdateStatistics();
 
-        StartCoroutine(
-            SpinRoutine()
-        );
+        StartCoroutine(SpinRoutine());
     }
 
     IEnumerator SpinRoutine()
     {
         isSpinning = true;
-
         spinButton.interactable = false;
 
         balanceManager.RemoveBet();
 
-        if (audioManager != null)
-            audioManager.PlaySpin();
+        audioManager?.PlaySpin();
 
-        SymbolData[] results =
-            new SymbolData[reels.Length];
+        SymbolData[] results = new SymbolData[reels.Length];
 
+        // FIXED: use the full symbol array
         for (int i = 0; i < reels.Length; i++)
         {
-            int randomIndex =
-                Random.Range(
-                    0,
-                    symbols.Length
-                );
-
-            results[i] =
-                symbols[randomIndex];
+            int randomIndex = Random.Range(0, symbols.Length);
+            results[i] = symbols[randomIndex];
         }
 
+        // Each reel spins slightly longer
         for (int i = 0; i < reels.Length; i++)
         {
             yield return StartCoroutine(
                 reels[i].Spin(
                     symbols,
-                    results[i]
+                    results[i],
+                    i * 0.35f
                 )
             );
 
-            yield return new WaitForSeconds(
-                0.25f
-            );
+            yield return new WaitForSeconds(0.15f);
         }
 
         CheckWin();
 
         spinButton.interactable = true;
-
         isSpinning = false;
     }
 
     void CheckWin()
     {
-        SymbolData first =
-            reels[0].currentSymbol;
+        SymbolData first = reels[0].currentSymbol;
+        SymbolData second = reels[1].currentSymbol;
+        SymbolData third = reels[2].currentSymbol;
 
-        SymbolData second =
-            reels[1].currentSymbol;
-
-        SymbolData third =
-            reels[2].currentSymbol;
-
-        if (first == second &&
-            second == third)
+        if (first == second && second == third)
         {
-            int reward =
-                first.payout;
+            int reward = first.payout;
 
-            bool isJackpot =
-                first.symbolName ==
-                "Seven";
-
-            if (isJackpot)
-            {
+            if (first.symbolName == "Seven")
                 reward = 500;
+
+            uiManager.ShowWin(reward);
+            uiManager.ShowWinScreen(first.symbolName, reward);
+
+            foreach (Reel reel in reels)
+            {
+                reel.symbol.glow.SetActive(true);
+
+                reel.symbol.glow.transform
+                    .DOScale(1.2f, 0.3f)
+                    .SetLoops(6, LoopType.Yoyo);
             }
 
-            uiManager.ShowWin(
-                reward
-            );
+            balanceManager.AddWin(reward);
 
-            uiManager.ShowWinScreen(
-                first.symbolName,
-                reward
-            );
-
-            reels[0].symbol.glow.SetActive(true);
-            reels[1].symbol.glow.SetActive(true);
-            reels[2].symbol.glow.SetActive(true);
-
-            reels[0].symbol.glow.transform
-                .DOScale(1.2f, 0.3f)
-                .SetLoops(6, LoopType.Yoyo);
-
-            reels[1].symbol.glow.transform
-                .DOScale(1.2f, 0.3f)
-                .SetLoops(6, LoopType.Yoyo);
-
-            reels[2].symbol.glow.transform
-                .DOScale(1.2f, 0.3f)
-                .SetLoops(6, LoopType.Yoyo);
-
-            balanceManager.AddWin(
-                reward
-            );
-
-            statisticsManager.RegisterWin(
-                reward
-            );
-
+            statisticsManager.RegisterWin(reward);
             uiManager.UpdateStatistics();
 
-            if (audioManager != null)
-                audioManager.PlayWin();
+            audioManager?.PlayWin();
 
-            reels[0].symbol.transform
-                .DOScale(1.25f, 0.2f)
-                .SetLoops(6, LoopType.Yoyo);
-
-            reels[1].symbol.transform
-                .DOScale(1.25f, 0.2f)
-                .SetLoops(6, LoopType.Yoyo);
-
-            reels[2].symbol.transform
-                .DOScale(1.25f, 0.2f)
-                .SetLoops(6, LoopType.Yoyo);
-
-            Debug.Log(
-                "WIN! Reward = " +
-                reward
-            );
+            StartCoroutine(reels[0].FlashWin());
+            StartCoroutine(reels[1].FlashWin());
+            StartCoroutine(reels[2].FlashWin());
         }
         else
         {
-            if (audioManager != null)
-                audioManager.PlayLose();
-
             uiManager.ShowLose();
-
-            Debug.Log("LOSE");
         }
     }
-    public void QuitGame()
-{
-    Application.Quit();
-
-    Debug.Log("Game Closed");
-}
 }
