@@ -230,9 +230,9 @@ MonoBehaviour:
   - {fileID: 543615929}
   symbols:
   - {fileID: 11400000, guid: a52d6e53e82fb78438f2304459ef87cb, type: 2}
-  - {fileID: 11400000, guid: cab1998a30029b548a2d7886aac92c66, type: 2}
   - {fileID: 11400000, guid: 59688eb3ff8c33f48b61bbc53a30b6e3, type: 2}
   - {fileID: 11400000, guid: fb58c41d638ed7141ba42486a74cdbb6, type: 2}
+  - {fileID: 11400000, guid: cab1998a30029b548a2d7886aac92c66, type: 2}
   balanceManager: {fileID: 493561588}
   uiManager: {fileID: 1976539158}
   audioManager: {fileID: 1531353461}
@@ -666,7 +666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 7.000061, y: 50}
+  m_AnchoredPosition: {x: 7, y: 50}
   m_SizeDelta: {x: 262.12, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &352801084
@@ -2641,7 +2641,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 6.9900513, y: -59.369}
+  m_AnchoredPosition: {x: 6.98999, y: -59.369}
   m_SizeDelta: {x: 262.12, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!1 &1531353459
@@ -3253,7 +3253,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 7.000061, y: 0}
+  m_AnchoredPosition: {x: 7, y: 0}
   m_SizeDelta: {x: 262.11, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1791340402
