@@ -40,7 +40,6 @@ Three Seven symbols award the jackpot prize.
 | Seven  | 500    |
 | Bell   | 50     |
 | Cherry | 25     |
-| Lemon  | 15     |
 | Bar    | 10     |
 
 ## Architecture Overview
