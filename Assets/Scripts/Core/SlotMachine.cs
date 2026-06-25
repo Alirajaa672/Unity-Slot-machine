@@ -82,7 +82,7 @@ public class SlotMachine : MonoBehaviour
         {
             int randomIndex =
                 Random.Range(
-                    2,
+                    0,
                     symbols.Length
                 );
 
